@@ -6,23 +6,32 @@ const cheerio = require('cheerio');
  * @param  {String} data - html response
  * @return {Array} products
  */
+
+
 const parse = data => {
   const $ = cheerio.load(data);
 
-  return $('.productList-container .productList')
+  return $('.products-list__block')
     .map((i, element) => {
       const name = $(element)
-        .find('.productList-title')
+        .find('.product-miniature__title')
         .text()
         .trim()
         .replace(/\s/g, ' ');
+
+      const color = $(element)
+        .find('.product-miniature__color')
+        .text()
+        .trim()
+        .replace(/\s/g, ' ');
+        
       const price = parseInt(
         $(element)
-          .find('.productList-price')
+          .find('.product-miniature__pricing')
           .text()
       );
 
-      return {name, price};
+      return {name, color, price};
     })
     .get();
 };
@@ -34,6 +43,7 @@ const parse = data => {
  */
 module.exports.scrape = async url => {
   try {
+    console.log("url")
     const response = await fetch(url);
 
     if (response.ok) {
