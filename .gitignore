@@ -115,3 +115,6 @@ scraper
 slides/dist
 serverless
 products.json
+server/sandbox1.js
+server/sandbox2.js
+server/sandbox3.js
