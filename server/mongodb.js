@@ -7,7 +7,7 @@ const MONGODB_DB_NAME = 'clearfashion';
 async function ClientConnect() {
   const client = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true });
   const db = client.db(MONGODB_DB_NAME);
-  const products = require('./all_products.json');
+  const products = require('./products.json');
   const collection = db.collection('products');
   const result = await collection.insertMany(products);
   console.log(result);
@@ -79,7 +79,7 @@ async function Products_Scraped_Less_Than_2_Weeks_Ago() {
 
 function main()
 {
-  ClientConnect(); 
+  //ClientConnect(); 
   Product_Brand("dedicated");
   Products_Less_Price(39);
   Products_Sorted_Price(-1);

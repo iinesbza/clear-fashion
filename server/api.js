@@ -19,7 +19,6 @@ app.get('/', (request, response) => {
   response.send({'ack': true});
 });
 
-
 async function SearchProducts(filters,limite) {
   const client = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true });
   const db = client.db(MONGODB_DB_NAME);
@@ -29,24 +28,25 @@ async function SearchProducts(filters,limite) {
   return result;
 }
 
+
 app.get('/products/search', async (req, res) => {
   const brand = req.query.brand || undefined;
   const limite = req.query.limit || 12;
   const price = req.query.price || undefined;
   let filters = {}
 
-
+  // filter by brand 
   if(brand!== undefined){
     filters.brand=brand; 
   }
 
-  
+  //filter by price 
   if (price!== undefined){
     filters.price = {$lte : parseInt(price)}; 
   }
 
   const products_search = await SearchProducts(filters,parseInt(limite));
- 
+  //res.json(products_search);
   res.send(products_search);
 });
 
@@ -62,6 +62,13 @@ async function findProductById(IdProduct) {
   return result;
 }
 
+// Executes a request to get a product
+
+app.get('/products/:id', async (req, res) => {
+  const IdProduct = req.params.id;
+  const product_id = await findProductById(IdProduct);
+  res.send(product_id);
+});
 
 app.listen(PORT);
 console.log(`📡 Running on port ${PORT}`);
